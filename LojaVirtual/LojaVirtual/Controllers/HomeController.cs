@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using LojaVirtual.Libraries.Email;
+using LojaVirtual.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LojaVirtual.Controllers
@@ -19,10 +21,14 @@ namespace LojaVirtual.Controllers
         }
         public IActionResult ContatoAcao()
         {
-            string nome = HttpContext.Request.Form["nome"];
-            string email = HttpContext.Request.Form["email"];
-            string texto = HttpContext.Request.Form["texto"];
-            return new ContentResult() { Content = string.Format("Dados recebidos com sucesso <br /> Nome: {0} <br /> Email: {1} <br /> Texto: {2} <br />", nome, email, texto), ContentType="text/html" };
+            Contato contato = new Contato();
+            contato.Nome = HttpContext.Request.Form["nome"];
+            contato.Email = HttpContext.Request.Form["email"];
+            contato.Texto = HttpContext.Request.Form["texto"];
+
+            ContatoEmail.EnviarContatoPorEmail(contato);
+
+            return new ContentResult() { Content = string.Format("Dados recebidos com sucesso <br /> Nome: {0} <br /> Email: {1} <br /> Texto: {2} <br />", contato.Nome, contato.Email, contato.Texto), ContentType="text/html" };
         }
         
         public IActionResult Login()
